@@ -24,7 +24,7 @@ extern "C" {
 		memcpy(&dst->data, packet, len);
 	}
 
-	rte_mbuf* libmoon_read_pcap(rte_mempool* mp, const pcapRecHeader* src, uint64_t remaining, uint32_t mempool_buf_size,uint8_t noEthernetHeader) {
+	rte_mbuf* libmoon_read_pcap(rte_mempool* mp, const pcapRecHeader* src, uint64_t remaining, uint32_t mempool_buf_size, uint8_t noEthernetHeader) {
 		if (src->incl_len >= remaining) {
 			return nullptr;
 		}

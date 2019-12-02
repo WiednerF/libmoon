@@ -181,8 +181,8 @@ function mod:newReader(filename)
 end
 
 ffi.cdef[[
-	struct rte_mbuf* libmoon_read_pcap(struct mempool* mp, const void* pcap, uint64_t remaining, uint32_t mempool_buf_size);
-	uint32_t libmoon_read_pcap_batch(struct mempool* mp, struct rte_mbuf** bufs, uint32_t num_bufs, const void* pcap, uint64_t remaining, uint32_t mempool_buf_size);
+	struct rte_mbuf* libmoon_read_pcap(struct mempool* mp, const void* pcap, uint64_t remaining, uint32_t mempool_buf_size, uint8_t noEthernetHeader);
+	uint32_t libmoon_read_pcap_batch(struct mempool* mp, struct rte_mbuf** bufs, uint32_t num_bufs, const void* pcap, uint64_t remaining, uint32_t mempool_buf_size, uint8_t noEthernetHeader);
 ]]
 
 --- Read the next packet into a buf, the timestamp is stored in the udata64 field as microseconds.
