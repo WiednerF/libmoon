@@ -157,7 +157,7 @@ local function readHeader(ptr)
 		log:warn("timezone information in pcap header ignored")
 	end
 	if hdr.network ~= 1 then
-		log:fatal("unsupported link layer type")
+		log:warn("unsupported link layer type")
 	end
 	return ffi.sizeof(headerType)
 end
@@ -187,17 +187,22 @@ ffi.cdef[[
 
 --- Read the next packet into a buf, the timestamp is stored in the udata64 field as microseconds.
 --- The buffer's packet size corresponds to the original packet size, cut off bytes are zero-filled.
-function reader:readSingle(mempool, mempoolBufSize)
+function reader:readSingle(mempool, mempoolBufSize, noEthernetHeader)
+	noEthernetHeader = noEthernetHeader or false
 	mempoolBufSize = mempoolBufSize or 2048
 	local fileRemaining = self.size - self.offset
 	if fileRemaining < 32 then -- header size
 		return nil
 	end
-	local buf = C.libmoon_read_pcap(mempool, self.ptr + self.offset, fileRemaining, mempoolBufSize)
+	local buf = C.libmoon_read_pcap(mempool, self.ptr + self.offset, fileRemaining, mempoolBufSize, noEthernetHeader)
 	if buf then
 		self.offset = self.offset + buf.pkt_len + 16
 		-- chained mbufs not supported for now
-		buf.pkt_len = buf.data_len
+		if noEthernetHeader then
+			buf.pkt_len = buf.data_len + 14
+		else
+			buf.pkt_len = buf.data_len
+		end
 	end
 	return buf
 end
@@ -205,17 +210,22 @@ end
 --- Read a batch of packets into a bufArray, the timestamp is stored in the udata64 field as microseconds.
 --- The buffer's packet size corresponds to the original packet size, cut off bytes are zero-filled.
 --- @return the number of packets read
-function reader:read(bufs, mempoolBufSize)
+function reader:read(bufs, mempoolBufSize, noEthernetHeader)
+	noEthernetHeader = noEthernetHeader or false
 	mempoolBufSize = mempoolBufSize or 2048
 	local fileRemaining = self.size - self.offset
 	if fileRemaining < 32 then -- header size
 		return 0
 	end
-	local numRead = C.libmoon_read_pcap_batch(bufs.mem, bufs.array, bufs.size, self.ptr + self.offset, fileRemaining, mempoolBufSize)
+	local numRead = C.libmoon_read_pcap_batch(bufs.mem, bufs.array, bufs.size, self.ptr + self.offset, fileRemaining, mempoolBufSize, noEthernetHeader)
 	for i = 0, numRead - 1 do
 		self.offset = self.offset + bufs.array[i].pkt_len + 16
 		-- chained mbufs not supported for now
-		bufs.array[i].pkt_len = bufs.array[i].data_len
+		if noEthernetHeader then
+			bufs.array[i].pkt_len = bufs.array[i].data_len + 14
+		else
+			bufs.array[i].pkt_len = bufs.array[i].data_len
+		end
 	end
 	return numRead
 end
