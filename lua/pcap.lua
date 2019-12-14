@@ -221,11 +221,7 @@ function reader:read(bufs, mempoolBufSize, noEthernetHeader)
 	for i = 0, numRead - 1 do
 		self.offset = self.offset + bufs.array[i].pkt_len + 16
 		-- chained mbufs not supported for now
-		if noEthernetHeader then
-			bufs.array[i].pkt_len = bufs.array[i].data_len + 14
-		else
-			bufs.array[i].pkt_len = bufs.array[i].data_len
-		end
+		bufs.array[i].pkt_len = bufs.array[i].data_len
 	end
 	return numRead
 end
