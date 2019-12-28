@@ -43,7 +43,7 @@ extern "C" {
 		uint8_t* data = rte_pktmbuf_mtod(res, uint8_t*);
 		if( noEthernetHeader ){
             memcpy(data + 14, &src->data, copy_len);
-            memset(data + copy_len + 12, 0, zero_fill_len);
+            memset(data + copy_len + 14, 0, zero_fill_len);
 		}else{
 		    memcpy(data, &src->data, copy_len);
 		    memset(data + copy_len, 0, zero_fill_len);
