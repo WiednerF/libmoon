@@ -38,7 +38,11 @@ extern "C" {
 			return res;
 		}
 		res->pkt_len = src->incl_len;
-		res->data_len = copy_len + zero_fill_len;
+		if( noEthernetHeader ){
+		    res->data_len = copy_len + zero_fill_len + 14;
+		} else {
+		    res->data_len = copy_len + zero_fill_len;
+		}
 		res->udata64 = src->ts_sec * 1000000ULL + src->ts_usec;
 		uint8_t* data = rte_pktmbuf_mtod(res, uint8_t*);
 		if( noEthernetHeader ){
