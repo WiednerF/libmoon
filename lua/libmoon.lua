@@ -8,7 +8,6 @@ local serpent    = require "Serpent"
 
 mod.config = namespaces:get()
 mod.config.appName = "libmoon"
-mod.config.includeSharedCores = false
 
 local function checkCore()
 	if LIBMOON_TASK_NAME ~= "master" then
