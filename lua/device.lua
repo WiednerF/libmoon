@@ -207,7 +207,7 @@ function mod.config(args)
 	dev:setPromisc(true)
 	if dev:getDriverName():match("i40e") then
 		local fw = dev:getFirmware()
-		if fw:match("^%s*5.05") then
+		if not fw == nil and fw:match("^%s*5.05") then
 			log:warn(
 				"Device %s is an i40e NIC with firmware 5.05 which has known bugs related to timestamping.\n" ..
 				"Refer to Intel's errata sheet for more information. Downgrade to 5.04 or upgrade to 6.x to fix this.",
