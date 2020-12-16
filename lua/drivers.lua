@@ -12,6 +12,8 @@ mod.net_virtio = require "driver.virtio"
 mod.net_vmxnet3 = require "driver.vmxnet3"
 mod.net_mlx5 = require "driver.mlx5"
 mod.net_ena = require "driver.ena"
+mod.net_ice = require "driver.ice"
+mod.net_iavf = require "driver.iavf"
 
 
 function mod.initDriver(dev)
