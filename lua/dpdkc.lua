@@ -109,6 +109,46 @@ ffi.cdef[[
 		uint16_t link_status: 1;
 	} __attribute__((aligned(8)));
 
+
+	struct rte_fdir_filter {
+		uint16_t flex_bytes;
+		uint16_t vlan_id;
+		uint16_t port_src;
+		uint16_t port_dst;
+		union {
+			uint32_t ipv4_addr;
+			uint32_t ipv6_addr[4];
+		} ip_src;
+		union {
+			uint32_t ipv4_addr;
+			uint32_t ipv6_addr[4];
+		} ip_dst;
+		int l4type;
+		int iptype;
+	};
+	enum rte_l4type {
+		RTE_FDIR_L4TYPE_NONE = 0,       /**< None. */
+		RTE_FDIR_L4TYPE_UDP,            /**< UDP. */
+		RTE_FDIR_L4TYPE_TCP,            /**< TCP. */
+		RTE_FDIR_L4TYPE_SCTP,           /**< SCTP. */
+	};
+
+
+	struct rte_fdir_masks {
+		uint8_t only_ip_flow;
+		uint8_t vlan_id;
+		uint8_t vlan_prio;
+		uint8_t flexbytes;
+		uint8_t set_ipv6_mask;
+		uint8_t comp_ipv6_dst;
+		uint32_t dst_ipv4_mask;
+		uint32_t src_ipv4_mask;
+		uint16_t dst_ipv6_mask;
+		uint16_t src_ipv6_mask;
+		uint16_t src_port_mask;
+		uint16_t dst_port_mask;
+	};
+
 	struct rte_eth_desc_lim {
 		uint16_t nb_max;   
 		uint16_t nb_min;   
