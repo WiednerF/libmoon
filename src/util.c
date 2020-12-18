@@ -54,9 +54,7 @@ static inline uint16_t get_ipv4_psd_sum (struct rte_ipv4_hdr* ip_hdr) {
 // TODO: cope with flexible offsets
 // offset: udp - 20; tcp - 25
 void calc_ipv4_pseudo_header_checksum(void* data, int offset) {
-//TODO Use rte_ipv4_phdr_cksum for calculations (Not working, more deeper look into the Problem here)
-    uint16_t csum = rte_ipv4_phdr_cksum((struct rte_ipv4_hdr*) ((uint8_t*)data + 14),((uint64_t*) data).ol_flags);
-	//uint16_t csum = get_ipv4_psd_sum((struct rte_ipv4_hdr*) ((uint8_t*)data + 14));
+	uint16_t csum = get_ipv4_psd_sum((struct rte_ipv4_hdr*) ((uint8_t*)data + 14));
 	((uint16_t*) data)[offset] = csum;
 }
 
