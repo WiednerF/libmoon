@@ -35,7 +35,7 @@ modprobe uio
 (lsmod | grep igb_uio > /dev/null) || insmod ../dpdk-kmods/linux/igb_uio/igb_uio.ko
 
 i=0
-for id in $(usertools/dpdk-devbind.py --status | grep -v Active | grep -v ConnectX | grep unused=igb_uio | cut -f 1 -d " ")
+for id in $(python3 usertools/dpdk-devbind.py --status | grep -v Active | grep -v ConnectX | grep unused=igb_uio | cut -f 1 -d " ")
 do
 	echo "Binding interface $id to DPDK"
 	python3 usertools/dpdk-devbind.py  --bind=igb_uio $id
