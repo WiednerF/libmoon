@@ -38,7 +38,7 @@ i=0
 for id in $(usertools/dpdk-devbind.py --status | grep -v Active | grep -v ConnectX | grep unused=igb_uio | cut -f 1 -d " ")
 do
 	echo "Binding interface $id to DPDK"
-	usertools/dpdk-devbind.py  --bind=igb_uio $id
+	python3 usertools/dpdk-devbind.py  --bind=igb_uio $id
 	i=$(($i+1))
 done
 
@@ -49,10 +49,10 @@ if $MLX5 ; then
 		printf "WARN: Could not load mlx5 kernel modules. Try to load them manually by executing: modprobe -a ib_uverbs mlx5_core mlx5_ib"  >&2
 	fi
 
-	for id in $(usertools/dpdk-devbind.py --status | grep -v Active | grep ConnectX-4 | cut -f 1 -d " ")
+	for id in $(python3 usertools/dpdk-devbind.py --status | grep -v Active | grep ConnectX-4 | cut -f 1 -d " ")
 	do
 		echo "Binding interface $id to DPDK (kernel module mlx5_core)"
-		usertools/dpdk-devbind.py  --bind=mlx5_core $id
+		python3 usertools/dpdk-devbind.py  --bind=mlx5_core $id
 		i=$(($i+1))
 	done
 fi
@@ -62,10 +62,10 @@ if $MLX4 ; then
 		printf "WARN: Could not load mlx5 kernel modules. Try to load them manually by executing: modprobe -a ib_uverbs mlx4_en mlx4_core mlx4_ib"  >&2
 	fi
 
-	for id in $(usertools/dpdk-devbind.py --status | grep -v Active | grep ConnectX-3 |  cut -f 1 -d " ")
+	for id in $(python3 usertools/dpdk-devbind.py --status | grep -v Active | grep ConnectX-3 |  cut -f 1 -d " ")
 	do
 		echo "Binding interface $id to DPDK (kernel module mlx4_core)"
-		usertools/dpdk-devbind.py  --bind=mlx4_core $id
+		python3 usertools/dpdk-devbind.py  --bind=mlx4_core $id
 		i=$(($i+1))
 	done
 fi
