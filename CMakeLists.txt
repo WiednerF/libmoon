@@ -32,28 +32,6 @@ SET(FILES
 	src/pktsizedring
 )
 
-SET(DPDK_LIBS
-	rte_net      rte_ethdev       rte_distributor 	 rte_mbuf      rte_pmd_bond       rte_kni              rte_pmd_ring     rte_power
-	rte_acl      rte_eal          rte_kvargs   	     rte_mempool   rte_mempool_ring	  rte_pmd_e1000        rte_pmd_virtio   rte_ring
-	rte_cfgfile  rte_hash         rte_lpm      	     rte_meter     rte_pmd_i40e   	  rte_common_iavf      rte_sched        rte_timer
-	rte_cmdline  rte_ip_frag      rte_pipeline 	     rte_pmd_ixgbe rte_mempool_stack  rte_port             rte_table        rte_pmd_bnxt
-	rte_pmd_ena  rte_pmd_nfp      rte_stack          rte_bus_vdev  rte_bus_pci        rte_pci              rte_cryptodev    rte_fib
-	rte_pmd_iavf rte_telemetry    rte_rcu            rte_eventdev  rte_rib
-)
-
-#Add Mellanox libraries if options are specified
-if(USE_MLX5 OR USE_MLX4)
-	SET(DPDK_LIBS ${DPDK_LIBS} ibverbs)
-endif()
-
-if(USE_MLX5)
-	SET(DPDK_LIBS ${DPDK_LIBS} rte_pmd_mlx5)
-endif()
-
-if(USE_MLX4)
-	SET(DPDK_LIBS ${DPDK_LIBS} rte_pmd_mlx4)
-endif()
-
 SET(LUAJIT_LIBS
 	luajit-5.1
 )
@@ -68,12 +46,19 @@ tbb_build(TBB_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/deps/tbb CONFIG_DIR TBB_DIR)
 # find the cmake configuration file
 find_package(TBB)
 
+find_package(PkgConfig QUIET)
+if(PKG_CONFIG_FOUND)
+  pkg_check_modules(dpdk QUIET libdpdk)
+endif()
+
+
+
 SET(ALL_LIBS
 	-Wl,--whole-archive
 	${LUAJIT_LIBS}
 	${HIGHWAYHASH_LIBS}
 	${TBB_IMPORTED_TARGETS}
-	-Wl,--start-group ${DPDK_LIBS} numa -Wl,--end-group
+	-Wl,--start-group ${dpdk_STATIC_LIBRARIES} numa -Wl,--end-group
 	pthread dl rt
 	-Wl,--no-whole-archive
 )

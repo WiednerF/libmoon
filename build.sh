@@ -74,7 +74,7 @@ fi
 CC=gcc meson --prefix=$(pwd)/x86_64-native-linux-gcc x86_64-native-linux-gcc
 ninja -C x86_64-native-linux-gcc
 ninja -C x86_64-native-linux-gcc install
-ldconfig
+export PKG_CONFIG_PATH=$(pwd)/x86_64-native-linux-gcc/lib/x86_64-linux-gnu/pkgconfig/:$PKG_CONFIG_PATH
 )
 
 (
