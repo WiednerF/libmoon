@@ -100,8 +100,8 @@ then
 else	
 	cd ../build
 fi
-cmake ${OPTIONS}..
-make -j $NUM_CPUS
+source cmake ${OPTIONS}..
+source make -j $NUM_CPUS
 )
 
 echo Trying to bind interfaces, this will fail if you are not root

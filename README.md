@@ -36,7 +36,7 @@ Just run `build.sh`, `bind-interfaces.sh`, and `setup-hugetlbfs.sh`. When using 
 
 ```
 # install dependencies and compile libmoon
-sudo apt-get install git build-essential cmake linux-headers-`uname -r` lshw libnuma-dev
+sudo apt-get install git build-essential cmake linux-headers-`uname -r` lshw libnuma-dev meson pkgconf
 git clone https://github.com/WiednerF/libmoon
 cd libmoon
 ./build.sh

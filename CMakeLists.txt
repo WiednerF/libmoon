@@ -44,11 +44,11 @@ SET(HIGHWAYHASH_LIBS
 include(${CMAKE_CURRENT_SOURCE_DIR}/deps/tbb/cmake/TBBBuild.cmake)
 tbb_build(TBB_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/deps/tbb CONFIG_DIR TBB_DIR)
 # find the cmake configuration file
-find_package(TBB)
+find_package(TBB COMPONENTS tbbmalloc tbbmalloc_proxy tbb_preview)
 
 find_package(PkgConfig QUIET)
 if(PKG_CONFIG_FOUND)
-  pkg_check_modules(dpdk QUIET libdpdk)
+  pkg_check_modules(dpdk IMPORTED_TARGET libdpdk)
 endif()
 
 
@@ -58,9 +58,9 @@ SET(ALL_LIBS
 	${LUAJIT_LIBS}
 	${HIGHWAYHASH_LIBS}
 	${TBB_IMPORTED_TARGETS}
-	-Wl,--start-group ${dpdk_STATIC_LIBRARIES} numa -Wl,--end-group
 	pthread dl rt
 	-Wl,--no-whole-archive
+	${dpdk_STATIC_LDFLAGS}
 )
 
 INCLUDE_DIRECTORIES(
@@ -90,9 +90,9 @@ IF(LIBMOON_BUILD_LIBRARY)
 	ADD_DEFINITIONS(-DLIBMOON_BUILD_LIB)
 	# we want libmoon.a, not liblibmoon.a
 	ADD_LIBRARY(moon STATIC ${FILES})
-	TARGET_LINK_LIBRARIES(moon ${ALL_LIBS})
+	TARGET_LINK_LIBRARIES(moon PUBLIC ${ALL_LIBS})
 ELSE()
 	ADD_EXECUTABLE(libmoon ${FILES})
-	TARGET_LINK_LIBRARIES(libmoon ${ALL_LIBS})
+	TARGET_LINK_LIBRARIES(libmoon PUBLIC ${ALL_LIBS})
 ENDIF()
 
