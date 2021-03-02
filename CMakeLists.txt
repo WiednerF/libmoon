@@ -46,11 +46,8 @@ tbb_build(TBB_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/deps/tbb CONFIG_DIR TBB_DIR)
 # find the cmake configuration file
 find_package(TBB)
 
-find_package(PkgConfig QUIET)
-if(PKG_CONFIG_FOUND)
-  pkg_check_modules(dpdk IMPORTED_TARGET libdpdk)
-endif()
-
+include(${CMAKE_CURRENT_SOURCE_DIR}/findDPDK.cmake)
+find_package(dpdk)
 
 
 SET(ALL_LIBS
