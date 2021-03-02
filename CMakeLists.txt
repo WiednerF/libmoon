@@ -53,12 +53,9 @@ find_package(TBB)
 
 
 SET(ALL_LIBS
-    ${dpdk_STATIC_LDFLAGS}
 	-Wl,--whole-archive
 	${LUAJIT_LIBS}
 	${HIGHWAYHASH_LIBS}
-	${TBB_IMPORTED_TARGETS}
-	pthread dl rt
 	-Wl,--no-whole-archive
 )
 
@@ -83,16 +80,15 @@ LINK_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/deps/dpdk/x86_64-native-linux-gcc/drivers
 	${CMAKE_CURRENT_SOURCE_DIR}/deps/luajit/usr/local/lib
 	${CMAKE_CURRENT_SOURCE_DIR}/deps/highwayhash/lib
-	${CMAKE_CURRENT_SOURCE_DIR}/build/tbb_cmake_build/tbb_cmake_build_subdir_release
 )
 
 IF(LIBMOON_BUILD_LIBRARY)
 	ADD_DEFINITIONS(-DLIBMOON_BUILD_LIB)
 	# we want libmoon.a, not liblibmoon.a
 	ADD_LIBRARY(moon STATIC ${FILES})
-	TARGET_LINK_LIBRARIES(moon PUBLIC ${ALL_LIBS})
+	TARGET_LINK_LIBRARIES(moon PUBLIC ${ALL_LIBS} ${TBB} ${dpdk_STATIC_LDFLAGS})
 ELSE()
 	ADD_EXECUTABLE(libmoon ${FILES})
-	TARGET_LINK_LIBRARIES(libmoon PUBLIC ${ALL_LIBS} ${TBB})
+	TARGET_LINK_LIBRARIES(libmoon PUBLIC ${ALL_LIBS} ${TBB} ${dpdk_STATIC_LDFLAGS})
 ENDIF()
 
