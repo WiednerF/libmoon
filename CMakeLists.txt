@@ -40,14 +40,16 @@ SET(HIGHWAYHASH_LIBS
 	highwayhash
 )
 
+find_package(PkgConfig QUIET)
+if(PKG_CONFIG_FOUND)
+  pkg_check_modules(dpdk IMPORTED_TARGET libdpdk)
+endif()
+
 # add tbb
 include(${CMAKE_CURRENT_SOURCE_DIR}/deps/tbb/cmake/TBBBuild.cmake)
 tbb_build(TBB_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/deps/tbb CONFIG_DIR TBB_DIR)
 # find the cmake configuration file
 find_package(TBB)
-
-include(${CMAKE_CURRENT_SOURCE_DIR}/findDPDK.cmake)
-find_package(dpdk)
 
 
 SET(ALL_LIBS
@@ -55,7 +57,6 @@ SET(ALL_LIBS
 	${LUAJIT_LIBS}
 	${HIGHWAYHASH_LIBS}
 	${TBB_IMPORTED_TARGETS}
-	-Wl,--start-group ${DPDK_LIBS} numa -Wl,--end-group
 	pthread dl rt
 	-Wl,--no-whole-archive
 	${dpdk_STATIC_LDFLAGS}
