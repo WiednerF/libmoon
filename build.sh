@@ -61,6 +61,8 @@ cd deps/dpdk-kmods/linux/igb_uio
 make -j $NUM_CPUS
 )
 
+export PKG_CONFIG_PATH=$(pwd)/deps/dpdk/x86_64-native-linux-gcc/lib/x86_64-linux-gnu/pkgconfig/:$PKG_CONFIG_PATH
+
 (
 cd deps/dpdk
 #build DPDK with the right configuration
@@ -74,7 +76,6 @@ fi
 CC=gcc meson --prefix=$(pwd)/x86_64-native-linux-gcc x86_64-native-linux-gcc
 ninja -C x86_64-native-linux-gcc
 ninja -C x86_64-native-linux-gcc install
-export PKG_CONFIG_PATH=$(pwd)/x86_64-native-linux-gcc/lib/x86_64-linux-gnu/pkgconfig/:$PKG_CONFIG_PATH
 )
 
 (
@@ -100,8 +101,8 @@ then
 else	
 	cd ../build
 fi
-source cmake ${OPTIONS}..
-source make -j $NUM_CPUS
+PKG_CONFIG_PATH=$PKG_CONFIG_PATH cmake ${OPTIONS}..
+PKG_CONFIG_PATH=$PKG_CONFIG_PATH make -j $NUM_CPUS
 )
 
 echo Trying to bind interfaces, this will fail if you are not root
