@@ -53,13 +53,13 @@ find_package(TBB)
 
 
 SET(ALL_LIBS
+    ${dpdk_STATIC_LDFLAGS}
 	-Wl,--whole-archive
 	${LUAJIT_LIBS}
 	${HIGHWAYHASH_LIBS}
 	${TBB_IMPORTED_TARGETS}
 	pthread dl rt
 	-Wl,--no-whole-archive
-	${dpdk_STATIC_LDFLAGS}
 )
 
 INCLUDE_DIRECTORIES(
