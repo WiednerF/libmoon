@@ -77,6 +77,7 @@ CC=gcc meson -Dtests=false -Ddisable_drivers=event/*,net/dpaa,net/dpaa2 --prefix
 echo "#define RTE_LIBRTE_IEEE1588 1" >> ./x86_64-native-linux-gcc/rte_build_config.h
 ninja -C x86_64-native-linux-gcc
 ninja -C x86_64-native-linux-gcc install
+ldconfig
 )
 
 (
