@@ -73,7 +73,7 @@ fi
 if ${MLX4} ; then
 	sed -ri 's,(MLX4_PMD=).*,\1y,' config/common_base
 fi
-CC=gcc meson -Dtests=false -Ddisable_drivers=event/*,net/dpaa,net/dpaa2 --prefix=$(pwd)/x86_64-native-linux-gcc x86_64-native-linux-gcc
+CC=gcc meson -Dtests=false -Ddisable_drivers=net/dpaa,net/dpaa2 --prefix=$(pwd)/x86_64-native-linux-gcc x86_64-native-linux-gcc
 echo "#define RTE_LIBRTE_IEEE1588 1" >> ./x86_64-native-linux-gcc/rte_build_config.h
 ninja -C x86_64-native-linux-gcc
 ninja -C x86_64-native-linux-gcc install
